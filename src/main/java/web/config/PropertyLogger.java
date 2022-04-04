@@ -29,7 +29,7 @@ public class PropertyLogger  {
                 .map(ps -> ((EnumerablePropertySource) ps).getPropertyNames())
                 .flatMap(Arrays::stream)
                 .distinct()
-//                .filter(prop -> !(prop.contains("credentials") || prop.contains("password")))
+                .filter(prop -> prop.contains("datasource"))
                 .forEach(prop -> LOGGER.info("{}: {}", prop, env.getProperty(prop)));
         LOGGER.info("===========================================");
     }

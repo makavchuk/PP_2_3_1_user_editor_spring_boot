@@ -42,17 +42,14 @@ public class MainController {
 		return modelAndView;
 	}
 
-
 	@RequestMapping(value = "/add", method = {RequestMethod.PUT, RequestMethod.POST})
 	public ModelAndView createUser(@ModelAttribute("user") User user) {
-		System.out.println("inserting " + user);
 		userService.addUser(user);
 		return new ModelAndView("redirect:/");
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = {RequestMethod.PUT, RequestMethod.POST})
 	public ModelAndView updateUser(@ModelAttribute("user") User user, @PathVariable int id) {
-		System.out.println("updating id = " + id);
 		user.setId(id);
 		userService.updateUser(user);
 		return new ModelAndView("redirect:/");
@@ -60,10 +57,7 @@ public class MainController {
 
 	@GetMapping (value = "/delete/{id}")
 	public ModelAndView deleteUser(@PathVariable int id) {
-		System.out.println("deleting id = " + id);
 		userService.deleteUser(id);
 		return new ModelAndView("redirect:/");
 	}
-
-
 }

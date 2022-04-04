@@ -1,12 +1,11 @@
 package web.dao;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import web.model.User;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -14,42 +13,38 @@ import java.util.List;
 @Transactional
 public class UserDaoImpl implements UserDao {
 
-    private SessionFactory sessionFactory;
+    private EntityManager entityManager;
 
-    public UserDaoImpl(@Autowired SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    private Session currentSession() {
-        return sessionFactory.getCurrentSession();
+    public UserDaoImpl(@Autowired EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Override
     public void addUser(User user) {
-        currentSession().persist(user);
+        entityManager.persist(user);
     }
 
     @Override
     public void updateUser(User user) {
-        if (currentSession().find(User.class, user.getId()) != null)
-            currentSession().merge(user);
+        if (entityManager.find(User.class, user.getId()) != null)
+            entityManager.merge(user);
     }
 
     @Override
     public User getUser(int id) {
-        return currentSession().find(User.class, id);
+        return entityManager.find(User.class, id);
     }
 
     @Override
     @Transactional
     public void deleteUser(int id) {
-        Query q = currentSession().createQuery("delete from User where id = :id");
+        Query q = entityManager.createQuery("delete from User where id = :id");
         q.setParameter("id", id);
         q.executeUpdate();
     }
 
     @Override
     public List<User> getUsers() {
-        return currentSession().createQuery("from User").getResultList();
+        return entityManager.createQuery("from User").getResultList();
     }
 }
